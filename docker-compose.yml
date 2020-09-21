@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app:cached
+    ports:
+      - 5555:5555
+    stdin_open: true
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql
+
+
+  redis:
+    image: redis:6.0
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6379:6379
+
+volumes:
+  db-data:
+    driver: local
+  redis-data:
+    driver: local
