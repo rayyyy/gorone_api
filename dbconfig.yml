@@ -1,0 +1,10 @@
+development:
+  dialect: mysql
+  datasource: root:pass@tcp(db:3306)/dev?parseTime=true
+  dir: db/migrations
+  table: migrations
+test:
+  dialect: mysql
+  datasource: root:pass@tcp(db:3306)/test?parseTime=true
+  dir: db/migrations
+  table: migrations
