@@ -1,7 +1,6 @@
 package models
 
 import (
-	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -9,5 +8,5 @@ import (
 type CalcResult struct {
 	gorm.Model
 	KeyName string
-	Result  datatypes.JSON
+	Result  int
 }

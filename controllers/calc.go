@@ -50,11 +50,12 @@ func GetStatus(c echo.Context) error {
 		return err
 	}
 
-	var results []models.CalcResult
-	res := db.Find(&results, req.GetValues())
+	// https://gorm.io/docs/advanced_query.html#Count
+	var count int64
+	db.Model(&models.CalcResult{}).Where("key_name IN ?", req.GetValues()).Count(&count)
 	ret := responses.Status{Status: "progress",
 		TotalCount: len(req.GetValues()),
-		Completed:  int(res.RowsAffected),
+		Completed:  int(count),
 	}
 	return c.JSON(http.StatusOK, ret)
 }
@@ -67,7 +68,7 @@ func GetResult(c echo.Context) error {
 		return err
 	}
 	var results []models.CalcResult
-	if err := db.Find(&results, req.GetValues()).Error; err != nil {
+	if err := db.Where("key_name IN ?", req.GetValues()).Find(&results).Error; err != nil {
 		// https://gorm.io/ja_JP/docs/error_handling.html
 		return err
 	}
