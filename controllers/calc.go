@@ -49,15 +49,28 @@ func GetStatus(c echo.Context) error {
 		// https://gorm.io/ja_JP/docs/error_handling.html
 		return err
 	}
-	ret := new(responses.Status)
-	ret.Status = "ok"
 
+	var results []models.CalcResult
+	res := db.Find(&results, req.GetValues())
+	ret := responses.Status{Status: "progress",
+		TotalCount: len(req.GetValues()),
+		Completed:  int(res.RowsAffected),
+	}
 	return c.JSON(http.StatusOK, ret)
 }
 
 func GetResult(c echo.Context) error {
-	ret := new(responses.Request)
-	ret.Message = "ok"
+	db := db.DbManager()
+	var req models.Request
+	if err := db.First(&req, c.Param("id")).Error; err != nil {
+		// https://gorm.io/ja_JP/docs/error_handling.html
+		return err
+	}
+	var results []models.CalcResult
+	if err := db.Find(&results, req.GetValues()).Error; err != nil {
+		// https://gorm.io/ja_JP/docs/error_handling.html
+		return err
+	}
 
-	return c.JSON(http.StatusOK, ret)
+	return c.JSON(http.StatusOK, results)
 }
