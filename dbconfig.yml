@@ -8,3 +8,8 @@ test:
   datasource: root:pass@tcp(db:3306)/test?parseTime=true
   dir: db/migrations
   table: migrations
+production:
+  dialect: mysql
+  datasource: ${DB_URL}?parseTime=true
+  dir: db/migrations
+  table: migrations

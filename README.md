@@ -9,3 +9,9 @@
   * Result取得API
 * キャッシュ機能
   * すでに処理が完了していたらpodに仕事させない
+
+
+
+```
+sql-migrate up --env=production
+```
