@@ -9,6 +9,7 @@ CREATE TABLE requests (
   created_at DATETIME NOT NULL DEFAULT current_timestamp,
   updated_at DATETIME NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
   done_at DATETIME,
+  terminated_at DATETIME,
   deleted_at DATETIME,
   PRIMARY KEY(id)
 );

@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// Request タスク
+// Request Request
 type Request struct {
 	RedisTagName string
 	JobType      string
@@ -21,6 +21,7 @@ type Request struct {
 	DoneAt *time.Time
 }
 
+// NewRequest 新規リクエスト発行
 func NewRequest(jobType string, params interface{}, desiredCount int) (*Request, error) {
 	json, err := json.Marshal(params)
 	if err != nil {
@@ -35,6 +36,7 @@ func NewRequest(jobType string, params interface{}, desiredCount int) (*Request,
 	return &req, nil
 }
 
+// DecodedBody bodyをJSONデコードしたものを返す
 func (r Request) DecodedBody() []string {
 	var data map[string][]string
 	err := json.Unmarshal(r.Body, &data)
@@ -44,11 +46,12 @@ func (r Request) DecodedBody() []string {
 	return data["values"]
 }
 
+// randTagName redis用のタグに使う文字列を生成する
 func randTagName() string {
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	// 乱数を生成
-	b := make([]byte, 10)
+	b := make([]byte, 5)
 	if _, err := rand.Read(b); err != nil {
 		fmt.Println("Error: " + err.Error())
 	}
