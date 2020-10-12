@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: before
     volumes:
       - .:/app:cached
     ports:

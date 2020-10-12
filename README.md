@@ -15,3 +15,8 @@
 ```
 sql-migrate up --env=production
 ```
+
+aws ecr get-login-password --region ap-northeast-1 --profile k8s-practice | docker login --username AWS --password-stdin 362534704782.dkr.ecr.ap-northeast-1.amazonaws.com
+docker build -t gorone-repository .
+docker tag gorone-repository:latest 362534704782.dkr.ecr.ap-northeast-1.amazonaws.com/gorone-repository:latest
+docker push 362534704782.dkr.ecr.ap-northeast-1.amazonaws.com/gorone-repository:latest
