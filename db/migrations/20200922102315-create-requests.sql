@@ -13,5 +13,9 @@ CREATE TABLE requests (
   PRIMARY KEY(id)
 );
 
+CREATE INDEX idx_requests_on_redis_tag_name ON requests(redis_tag_name);
+CREATE INDEX idx_requests_on_job_type ON requests(job_type);
+CREATE INDEX idx_requests_on_done_at ON requests(done_at);
+
 -- +migrate Down
 DROP TABLE requests;

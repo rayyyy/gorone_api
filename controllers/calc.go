@@ -21,11 +21,11 @@ func RequestCalc(c echo.Context) error {
 		return err
 	}
 	params.Values = util.UniqString(params.Values)
-	req, err := models.NewRequest(params)
+	req, err := models.NewRequest("calc", params, 5)
 	if err != nil {
 		return err
 	}
-	err = calc.Publish(params.Values)
+	err = calc.Publish(*req)
 	if err != nil {
 		return err
 	}
@@ -52,9 +52,9 @@ func GetStatus(c echo.Context) error {
 
 	// https://gorm.io/docs/advanced_query.html#Count
 	var count int64
-	db.Model(&models.CalcResult{}).Where("key_name IN ?", req.GetValues()).Count(&count)
+	db.Model(&models.CalcResult{}).Where("key_name IN ?", req.DecodedBody()).Count(&count)
 	ret := responses.Status{Status: "progress",
-		TotalCount: len(req.GetValues()),
+		TotalCount: len(req.DecodedBody()),
 		Completed:  int(count),
 	}
 	return c.JSON(http.StatusOK, ret)
@@ -68,7 +68,7 @@ func GetResult(c echo.Context) error {
 		return err
 	}
 	var results []models.CalcResult
-	if err := db.Where("key_name IN ?", req.GetValues()).Find(&results).Error; err != nil {
+	if err := db.Where("key_name IN ?", req.DecodedBody()).Find(&results).Error; err != nil {
 		// https://gorm.io/ja_JP/docs/error_handling.html
 		return err
 	}
