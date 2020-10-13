@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"gorone_api/db"
 	calc "gorone_api/lib/queue"
 	"gorone_api/lib/util"
@@ -53,9 +54,16 @@ func GetStatus(c echo.Context) error {
 	// https://gorm.io/docs/advanced_query.html#Count
 	var count int64
 	db.Model(&models.CalcResult{}).Where("key_name IN ?", req.DecodedBody()).Count(&count)
-	ret := responses.Status{Status: "progress",
+	fmt.Println(count)
+	ret := responses.Status{
 		TotalCount: len(req.DecodedBody()),
 		Completed:  int(count),
+		RequestID:  int(req.ID),
+	}
+	if len(req.DecodedBody()) == int(count) {
+		ret.Status = "OK"
+	} else {
+		ret.Status = "processing"
 	}
 	return c.JSON(http.StatusOK, ret)
 }
